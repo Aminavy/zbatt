@@ -1,8 +1,3 @@
-PREFIX = /usr/local
-
-install: build
-	install zbatt $(PREFIX)/bin/ 
-
 build: main.o
 	cc main.o -o zbatt `pkg-config --cflags --libs gtk+-2.0`
 
