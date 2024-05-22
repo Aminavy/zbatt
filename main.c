@@ -94,8 +94,15 @@ void update_battery_icon(GtkStatusIcon *icon, const struct batt_info *info)
 
 	sprintf(tooltip_txt, "Charge: %d%% (%d:%d)", info -> life, info -> time/60, info -> time%60);
 
-	gtk_status_icon_set_from_icon_name(icon, status);
-	//free(status);
+	gint size = gtk_status_icon_get_size(icon);
+
+	GdkPixbuf *pix = gtk_icon_theme_load_icon(gtk_icon_theme_get_default(),
+			status,
+			size,
+			GTK_ICON_LOOKUP_USE_BUILTIN,
+			NULL);
+	gtk_status_icon_set_from_pixbuf(icon, pix);
+	free(status);
 	gtk_status_icon_set_tooltip_text(icon, tooltip_txt);
 }
 
