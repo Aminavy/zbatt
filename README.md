@@ -1,2 +1,2 @@
 # zbatt
-Display battery status icon in tray for FreeBSD
+Like cbatticon, display battery status icon in tray but for FreeBSD.
