@@ -23,7 +23,7 @@ struct configuration {
        
 static void create_tray_icon(const struct configuration *);
 void read_battery_status(unsigned int *, int *, int *);
-gboolean get_option(char, char *, int, char **);
+gboolean get_option(char, char *, int, char **, const char);
 
 int main(int argc, char *argv[]) {
 	char *str = (char *)malloc(sizeof(char)*6);
@@ -33,11 +33,24 @@ int main(int argc, char *argv[]) {
 
 	if(argc > 1)
 	{
-		if(get_option('i', str, argc, argv))
+		if(get_option('i', str, argc, argv, TRUE))
 		{
 			config.update_interval = atoi(str);
 			free(str);
 		}
+		else if(get_option('v', NULL, argc, argv, FALSE))
+		{
+			printf("zbatt version: 0.1\n");
+			free(str);
+			exit(0);
+		}
+		else
+		{
+			printf("usage: zbatt [-i update interval] [-v]\n");
+			free(str);
+			exit(1);
+		}
+		
 		//g_print("interval = %d\n", config.update_interval);
 	}
 	
@@ -145,7 +158,7 @@ void read_battery_status(unsigned int *life, int *time, int *state)
 	g_print("Battery life: %d\n", *life);
 }
 
-gboolean get_option(char op, char *var, int argc, char *argv[])
+gboolean get_option(char op, char *var, int argc, char *argv[], const char flag)
 {
 	for(int i = 0; i<argc; i++)
 	{
@@ -154,6 +167,7 @@ gboolean get_option(char op, char *var, int argc, char *argv[])
 			if(argv[i][1] == op)
 			{
 				i++;
+				if(flag == FALSE) return TRUE;
 				while(*argv[i] != '\0')
 				{
 					*var++ = *argv[i];
